@@ -1,61 +1,89 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ExpensesManager {
-    ArrayList<Expense> expenses;
-    
+    HashMap<String, ArrayList<Double>> expensesByCategories;
+
     ExpensesManager() {
-        expenses = new ArrayList<>();
+        expensesByCategories = new HashMap<>();
     }
-    
-    double saveExpense(double moneyBeforeSalary, double expense) {
+
+    double saveExpense(double moneyBeforeSalary, double expense, String category) {
         moneyBeforeSalary = moneyBeforeSalary - expense;
-        expenses.add(new Expense(expense));
         System.out.println("Значение сохранено! Ваш текущий баланс в рублях: " + moneyBeforeSalary);
+
+        ArrayList<Double> expensesList;
+        if (expensesByCategories.containsKey(category)) {
+            expensesList = expensesByCategories.get(category);
+            expensesList.add(expense);
+        } else {
+            expensesList = new ArrayList<>();
+            expensesList.add(expense);
+            expensesByCategories.put(category, expensesList);
+        }
         if (moneyBeforeSalary < 1000) {
             System.out.println("На вашем счету осталось совсем немного. Стоит начать экономить!");
         }
         return moneyBeforeSalary;
     }
 
-    void printAllExpenses() {
-        for (int i = 0; i < expenses.size(); i++) {
-            Expense exp = expenses.get(i);
-            System.out.println("Трата № " + (i + 1) + ". Потрачено " + exp.getValue() + " рублей, код транзакции: "+exp.getTransaction());
+    void printAllExpensesByCategories() {
+        for (String category : expensesByCategories.keySet()) {
+            System.out.println(category);
+            ArrayList<Double> expensesList = expensesByCategories.get(category);
+            for (Double expense : expensesList) {
+                System.out.println(expense);
+            }
         }
     }
 
-    double findMaxExpense() {
+    double findMaxExpenseInCategory(String category) {
         double maxExpense = 0;
-        for (Expense exp : expenses) {
-            if (exp.getValue() > maxExpense) {
-                maxExpense = exp.getValue();
+        if (expensesByCategories.containsKey(category)) {
+            ArrayList<Double> expensesList = expensesByCategories.get(category);
+            for (Double expense : expensesList) {
+                if (expense > maxExpense) {
+                    maxExpense = expense;
+                }
             }
-        }
+        } else System.out.println("Такой категории пока нет.");
         return maxExpense;
     }
 
     void removeAllExpenses() {
-        expenses.clear();
-        System.out.println("Список трат пуст");
+        expensesByCategories.clear();
+        System.out.println("Траты удалены.");
     }
 
-    void removeExpense(int transaction) {
-        if (expenses.isEmpty()) {
-            System.out.println("Список трат пуст.");
-        } else {
-            int index = -1;
-            for (int i = 0; i < expenses.size(); i++) {
-                if (expenses.get(i).getTransaction() == transaction) {
-                    index = i;
-                    break;
-                }
-            }
-            if (index >= 0) {
-                expenses.remove(index);
-                System.out.println("Трата удалена!");
-            } else {
-                System.out.println("Такой траты нет.");
+    double getExpensesSum() {
+        double result = 0;
+        for (ArrayList<Double> expenseList : expensesByCategories.values()) {
+            for (Double expense : expenseList) {
+                result += expense;
             }
         }
+        return result;
+    }
+
+    void removeCategory(String category) {
+        expensesByCategories.remove(category);
+    }
+
+    String getMaxCategoryName() {
+        double maxCategorySum = 0;
+        String maxCategoryName = "";
+
+        for (String category : expensesByCategories.keySet()) {
+            Double sum = 0.0;
+            ArrayList<Double> expensesList = expensesByCategories.get(category);
+            for (Double expense : expensesList) {
+                sum += expense;
+            }
+            if (sum > maxCategorySum) {
+                maxCategorySum = sum;
+                maxCategoryName = category;
+            }
+        }
+        return maxCategoryName;
     }
 }
