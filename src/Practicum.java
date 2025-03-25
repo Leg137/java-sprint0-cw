@@ -34,6 +34,12 @@ public class Practicum {
                 expensesManager.printAllExpenses();
             } else if (command == 5) {
                 System.out.println("Самая большая сумма расходов на этой неделе составила " + expensesManager.findMaxExpense() + " руб.");
+            } else if (command == 6) {
+                expensesManager.removeAllExpenses();
+            } else if (command == 7) {
+                System.out.println("Введите транзакцию:");
+                int transaction = scanner.nextInt();
+                expensesManager.removeExpense(transaction);
             } else if (command == 0) {
                 System.out.println("Выход");
                 break;
@@ -50,6 +56,8 @@ public class Practicum {
         System.out.println("3 - Ввести трату");
         System.out.println("4 - Показать траты за неделю");
         System.out.println("5 - Показать самую большую сумму расходов за неделю");
+        System.out.println("6 — Очистить список трат");
+        System.out.println("7 — Найти и удалить трату");
         System.out.println("0 - Выход");
     }
 }
