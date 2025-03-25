@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class Praktikum {
+public class Practicum {
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
@@ -27,14 +27,9 @@ public class Praktikum {
             } else if (command == 2) {
                 dinnerAdvisor.getAdvice(moneyBeforeSalary, daysBeforeSalary);
             } else if (command == 3) {
-                System.out.println("За какой день вы хотите ввести трату: 1-ПН, 2-ВТ, 3-СР, 4-ЧТ, 5-ПТ, 6-СБ, 7-ВС?");
-                int day = scanner.nextInt();
                 System.out.println("Введите размер траты:");
                 double expense = scanner.nextDouble();
-                
-                moneyBeforeSalary = expensesManager.saveExpense(moneyBeforeSalary, expense, day);
-                
-                
+                moneyBeforeSalary = expensesManager.saveExpense(moneyBeforeSalary, expense);
             } else if (command == 4) {
                 expensesManager.printAllExpenses();
             } else if (command == 5) {
